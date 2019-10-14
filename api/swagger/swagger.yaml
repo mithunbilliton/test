@@ -1,0 +1,418 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: systemTest
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  '/category':
+    x-swagger-router-controller: test.controller
+    post:
+      description: Creates a category
+      operationId: v1_createCategory
+      parameters:
+        - name: data
+          in: body
+          description: Create a category in the system
+          required: true
+          schema:
+            $ref : "#/definitions/category_create"
+      responses:
+        201:
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error_response"
+    get:
+      description: Retrive a list of available categories
+      operationId: v1_fetchCategory
+      parameters:
+        - name: page
+          in: query
+          type: integer
+          description: Page number
+        - name: count
+          in: query
+          type: integer
+          description: Number of category per page 
+        - name: filter
+          in: query
+          type: string
+          description: Filter category based on certain fields
+        - name: select
+          in: query
+          type: string
+          description: Comma seperated fields to be displayed
+        - name: sort
+          in: query
+          type: string
+          description: Sort parameter
+      responses:
+        200:
+          description: List of the entites
+        400:
+          description: Bad parameters
+          schema:
+            $ref: "#/definitions/error_response"
+        404:
+          description: No catogery to list with the given parameter set.
+          schema:
+            $ref: "#/definitions/error_response"
+        500:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/error_response"
+            
+  '/category/count':
+    x-swagger-router-controller: test.controller
+    get:
+      description: Fetch total category count
+      operationId: v1_categoryCount
+      parameters:
+        - name: filter
+          in: query
+          type: string
+          description:  Filter on the basis of which the count needs to be obtained
+      responses:
+        200:
+          description:  success
+          schema:
+            type: string
+        400:
+          description:  failed
+          schema:
+            $ref: "#/definitions/error_response"
+            
+  '/category/{id}':
+    x-swagger-router-controller: test.controller
+    put:
+      description: Update a category
+      operationId: v1_updateCategory
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the category
+          required: true
+        - name: data
+          in: body
+          description: Data requiring update
+          required: true
+          schema:
+            $ref: "#/definitions/category_create"
+      responses:
+        200:
+          description: Parameters look good.
+          schema:
+            $ref: "#/definitions/category_create"
+        400:
+          description: Bad parameters
+          schema:
+            $ref: "#/definitions/error_response"
+        404:
+          description: No service type to list with the give parameter set.
+          schema:
+            $ref: "#/definitions/error_response"
+        500:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/error_response"
+    get:
+      description: Fetch category by Id
+      operationId: v1_fetchCategoryById
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the category
+          required: true
+        - name: filter
+          in: query
+          type: string
+          description: Filter types based on certain fields 
+        - name: select
+          in: query
+          type: string
+          description: Comma seperated fields to be displayed
+      responses:
+        200:
+          description: Get a category
+          schema:
+            $ref: "#/definitions/category_create"
+        400:
+          description: Bad parameters
+          schema:
+            $ref: "#/definitions/error_response"
+        404:
+          description: Coudn't locate the donor.
+          schema:
+            $ref: "#/definitions/error_response"
+
+    patch:
+      operationId: v1_updateCategoryPatch
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: update the category
+          required: true
+        - name: data
+          in: body
+          description: Data requiring the update
+          required: true
+          schema: 
+            $ref: "#/definitions/category_create"  
+      responses:
+        200:
+          description: Success
+        400:
+          description: Get failure. 
+          schema:
+            $ref: "#/definitions/error_response"
+
+    delete:
+      description: Delete a category
+      operationId: v1_deleteCategory
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the Category
+          required: true
+      responses:
+        200:
+          description: category Deleted
+          schema:
+            type: string
+        400:
+          description: Bad parameters
+          schema:
+            $ref: "#/definitions/error_response"
+        404:
+          description: Coudnt locate the category.      
+          schema:
+            $ref: "#/definitions/error_response"
+
+  '/product':
+    x-swagger-router-controller: test.controller
+    post:
+      description: Creates a product
+      operationId: v1_createProduct
+      parameters:
+        - name: data
+          in: body
+          description: Create a product in the system
+          required: true
+          schema:
+            $ref : "#/definitions/product_create"
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/error_response"
+    get:
+      description: Retrive a list of available product
+      operationId: v1_fetchProduct
+      parameters:
+        - name: page
+          in: query
+          type: integer
+          description: Page number
+        - name: count
+          in: query
+          type: integer
+          description: Number of product per page 
+        - name: filter
+          in: query
+          type: string
+          description: Filter product based on certain fields
+        - name: select
+          in: query
+          type: string
+          description: Comma seperated fields to be displayed
+        - name: sort
+          in: query
+          type: string
+          description: Sort parameter
+      responses:
+        200:
+          description: List of the entites
+        400:
+          description: Bad parameters
+          schema:
+            $ref: "#/definitions/error_response"
+        404:
+          description: No product to list with the given parameter set.
+          schema:
+            $ref: "#/definitions/error_response"
+        500:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/error_response"
+            
+  '/product/count':
+    x-swagger-router-controller: test.controller
+    get:
+      description: Fetch total product count
+      operationId: v1_productCount
+      parameters:
+        - name: filter
+          in: query
+          type: string
+          description:  Filter on the basis of which the count needs to be obtained
+      responses:
+        200:
+          description:  success
+          schema:
+            type: string
+        400:
+          description:  failed
+          schema:
+            $ref: "#/definitions/error_response"
+            
+  '/product/{id}':
+    x-swagger-router-controller: test.controller
+    put:
+      description: Update a product
+      operationId: v1_updateProduct
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the product
+          required: true
+        - name: data
+          in: body
+          description: Data requiring update
+          required: true
+          schema:
+            $ref: "#/definitions/product_create"
+      responses:
+        200:
+          description: Parameters look good.
+          schema:
+            $ref: "#/definitions/product_create"
+        400:
+          description: Bad parameters
+          schema:
+            $ref: "#/definitions/error_response"
+        404:
+          description: No service type to list with the give parameter set.
+          schema:
+            $ref: "#/definitions/error_response"
+        500:
+          description: Internal server error
+          schema:
+            $ref: "#/definitions/error_response"
+    get:
+      description: Fetch product by Id
+      operationId: v1_fetchProductById
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the product
+          required: true
+        - name: filter
+          in: query
+          type: string
+          description: Filter types based on certain fields 
+        - name: select
+          in: query
+          type: string
+          description: Comma seperated fields to be displayed
+      responses:
+        200:
+          description: Get a category
+          schema:
+            $ref: "#/definitions/product_create"
+        400:
+          description: Bad parameters
+          schema:
+            $ref: "#/definitions/error_response"
+        404:
+          description: Coudn't locate the donor.
+          schema:
+            $ref: "#/definitions/error_response"
+
+    patch:
+      operationId: v1_updateProductPatch
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: update the product
+          required: true
+        - name: data
+          in: body
+          description: Data requiring the update
+          required: true
+          schema: 
+            $ref: "#/definitions/product_create"  
+      responses:
+        200:
+          description: Success
+        400:
+          description: Get failure. 
+          schema:
+            $ref: "#/definitions/error_response"
+
+    delete:
+      description: Delete a product
+      operationId: v1_deleteProduct
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the product
+          required: true
+      responses:
+        200:
+          description: product Deleted
+          schema:
+            type: string
+        400:
+          description: Bad parameters
+          schema:
+            $ref: "#/definitions/error_response"
+        404:
+          description: Coudnt locate the product.      
+          schema:
+            $ref: "#/definitions/error_response"
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  category_create:
+    properties:
+      catogeryName: { type: string}
+       
+  product_create:
+    required:
+      - productName
+    properties:
+      productName:
+        type: string
+  error_response:
+    required:
+      - message
+    properties:
+      message:
+        type: string
